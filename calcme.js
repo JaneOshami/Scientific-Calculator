@@ -382,6 +382,16 @@ function replayHistory() {
   }
 }
 
+document.addEventListener('click', (event) => {
+  const panel = document.getElementById('history-panel');
+  const target = event.target;
+
+  if (!panel || panel.classList.contains('hidden')) return;
+  if (target.closest('.history-panel, .btn-replay')) return;
+
+  panel.classList.add('hidden');
+});
+
 // Save calculation entry
 function saveToHistory(expr, res) {
   // Prevent saving errors or empty runs
