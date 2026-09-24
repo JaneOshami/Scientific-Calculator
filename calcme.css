@@ -1,0 +1,503 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* THEME PALETTE VARIABLES */
+/* Pink Theme (Default Mode) */
+:root, body[data-theme="pink"] {
+    --bg-image: url(images/pink_calc_background.jpg);
+    --calc-body: #e571af;
+    --calc-shadow: 0 20px 40px rgba(0, 0, 0, 0.25),
+                0 0 25px rgba(229, 113, 175, 0.4);
+    --button-shadow: 0 5px 8px rgba(91, 38, 70, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.28);
+    --button-active-shadow: 0 2px 3px rgba(91, 38, 70, 0.2), inset 0 2px 3px rgba(91, 38, 70, 0.16);
+    --screen-bg: #fff5f8;
+    --screen-shadow: #c36095;
+    --equation-shadow: #ff82c9;
+    --num-btn: #fff5f8;
+    --num-shadow: #f6e5e8;
+    --func-btn: #bbf7d0;
+    --func-shadow: #aee7c2;
+    --action-btn: #f43f5e;
+    --action-shadow: #ee3957;
+    --top-keys: #fce7f3;
+    --top-shadow: #f6dceb;
+    --history-bg: rgba(255, 245, 248, 0.92);
+    --history-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 
+              0 0 20px rgba(229, 113, 175, 0.3);
+    --history-header: #831843;
+    --history-header-border: #fbcfe8;
+    --history-item-bg: #ffffff;
+    --history-item-border: #fce7f3;
+    --history-expr: #9d4edd;
+    --history-result: #2b2b2b;
+}
+
+/* Midnight Blue (Dark mode) */
+body[data-theme="dark"] {
+    --bg-image: url(images/dark_calc_background.jpg);
+    --calc-body: #0f172a;
+    --calc-shadow: 0 24px 50px rgba(0, 0, 0, 0.62),
+        0 8px 18px rgba(2, 6, 23, 0.45),
+        inset 0 1px 0 rgba(148, 163, 184, 0.12);
+    --button-shadow: 0 6px 10px rgba(2, 6, 23, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -2px 3px rgba(2, 6, 23, 0.2);
+    --button-active-shadow: 0 2px 4px rgba(2, 6, 23, 0.55),
+        inset 0 2px 4px rgba(2, 6, 23, 0.32);
+    --screen-bg: #111827;
+    --screen-shadow: #1e293b;
+    --equation-shadow: #172340;
+    --num-btn: #243044;
+    --num-shadow: #222c3e;
+    --func-btn: #162c3d;
+    --func-shadow: #1a3d3e;
+    --action-btn: #d8315b;
+    --action-shadow: #c81e4d;
+    --top-keys: #334155;
+    --top-shadow: #1e293b;
+    --history-bg: rgba(15, 23, 42, 0.94);
+    --history-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 
+              0 0 20px rgba(15, 23, 42, 0.45),
+              0 8px 18px rgba(2, 6, 23, 0.3);
+    --history-header:#f43f5e;
+    --history-header-border: #28374f;
+    --history-item-bg: #1e293b;
+    --history-item-border: #334155;
+    --history-expr: #93c5fd;
+    --history-result: #ffffff;
+}
+
+/* Soft Rose (Light mode) */
+body[data-theme="light"] {
+    --bg-image: url(images/light_calc_background.jpg);
+    --calc-body: #f5e6ea;
+    --calc-shadow: rgba(128, 0, 32, 0.18);
+    --button-shadow: 0 5px 8px rgba(91, 38, 70, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.28);
+    --button-active-shadow: 0 2px 3px rgba(91, 38, 70, 0.2), inset 0 2px 3px rgba(91, 38, 70, 0.16);
+    --screen-bg: #faf7f8;
+    --screen-shadow: #f5d0dc;
+    --equation-shadow: #f1cece;
+    --num-btn: #f8f3ed;
+    --num-shadow: #e9d8de;
+    --func-btn: #e2bcc7;
+    --func-shadow: #f5d0dc;
+    --action-btn: #b81d42;
+    --action-shadow: #a51a3b;
+    --top-keys: #f5dfe6;
+    --top-shadow: #f5d0dc;
+    --history-bg: rgba(255, 255, 255, 0.94);
+    --history-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 
+              0 0 20px rgba(229, 113, 175, 0.3);
+    --history-header: #800020;
+    --history-header-border: #f5d0dc;
+    --history-item-bg: #fdf6f8;
+    --history-item-border: #f5d0dc;
+    --history-expr: #7e2237;
+    --history-result: #4a0e17;
+}
+
+
+body {
+    background: var(--bg-image) center / cover no-repeat fixed;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Removes the scrollbar completely */
+    transition: background 0.2s ease-in-out;
+}
+
+.calculator {
+    border-radius: 40px;
+    background: var(--calc-body);
+    width: 100%;
+    max-width: 440px;
+    padding: 28px 8px;
+    transform: scale(0.82); /* Shrinks the entire layout without breaking button grid alignment */
+    transform-origin: center center;
+    box-shadow: var(--calc-shadow);
+}
+
+.calc-name {
+    font-family: 'Passions Conflict', 'Times New Roman', cursive;
+    font-size: 54px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.calc-type {
+    font-family: 'Times New Roman', Times, serif, cursive;
+    font-size: 12px;
+    margin: 3px 10px;
+    text-align: right;
+}
+
+.calc-screen {
+    background: var(--screen-bg);
+    box-shadow: inset 10px 10px 20px var(--screen-shadow);
+    border-radius: 30px;
+    padding: 20px;
+    width: 100%;
+    text-align: right;
+    margin: 20px auto;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.calc-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: right;
+    font-size: 2rem;
+}
+
+.screen-indicators {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    min-height: 1.2em;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.grid-one {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-shift {
+    border: none;
+    border-radius: 15px 15px;
+    padding: 10px;
+    background-color: var(--top-keys) !important;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin: 20px;
+}
+
+.btn-on {
+    border: none;
+    border-radius: 15px 15px;
+    padding: 20px;
+    background-color: var(--top-keys) !important;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin: 20px 25px;
+}
+
+.btn-replay {
+    border: none;
+    border-radius: 27px 27px;
+    padding: 23px;
+    background-color: var(--top-keys) !important;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin: 8px 27px;
+}
+
+.btn-shift:hover, .btn-on:hover, .btn-replay:hover {
+    background-color: var(--top-shadow);
+}
+
+.btn-shift, .btn-on, .btn-replay,
+.btn-func, .btn, .btn-op, .btn-ten, .btn-ans, .btn-equation,
+.btn-del, .btn-ac {
+    box-shadow: var(--button-shadow);
+}
+
+.btn-shift:active, .btn-on:active, .btn-replay:active,
+.btn-func:active, .btn:active, .btn-op:active, .btn-ten:active,
+.btn-ans:active, .btn-equation:active, .btn-del:active, .btn-ac:active {
+    transform: scale(0.93);
+    box-shadow: var(--button-active-shadow);
+}
+
+/* When SHIFT is active, give it a glowing ring and stardust background */
+.btn-shift:active, .btn-on:active {
+  background-color: var(--func-shadow) !important; /* Golden stardust */
+  color: #831843 !important;
+  box-shadow: 0 0 12px rgb(174, 231, 194), 
+              inset 0 0 4px rgba(0, 0, 0, 0.15);
+  transform: scale(0.96);
+}
+
+.grid-two {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px; /* Adjust gap between cluster and center */
+  width: 100%;
+  transform: translateY(-10px);
+  margin-bottom: -16px; /* Pulls the lower rows up */
+  position: relative;
+  z-index: 2;
+}
+
+.grid-two .btn-func {
+    width: 60px;
+    height: 30px;
+}
+
+.side-cluster {
+  display: flex;
+  gap: 18px; /* Tight space between DRG and x! */
+}
+
+.replay-gap {
+  width: 70px; /* Width matching REPLAY button's bottom curve */
+}
+
+.btn-func {
+    background-color: var(--func-btn);
+    border: none;
+    border-radius: 20px 20px;
+    padding: 2px 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin: 8px 5px;
+}
+
+.btn-func:hover {
+    background-color: var(--func-shadow);
+}
+
+.btn-func:active {
+    transform: scale(0.93);
+}
+
+.grid-three {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1;
+  font-size: 0.80em;
+}
+
+.frac .num,
+.frac .den {
+  display: block;
+  font-size: 0.85em;
+}
+
+.frac .bar {
+  width: 100%;
+  min-width: 14px;
+  height: 1.3px;
+  background-color: currentColor; /* Matches the text color */
+  margin: 1px 0;
+}
+
+.grid-four {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.btn, .btn-op, .btn-ten, .btn-ans, .btn-equation {
+    background-color: var(--num-btn);
+    border: none;
+    border-radius: 20px 20px;
+    padding: 12px 0;
+    margin: 5px 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn:hover, .btn-op:hover, .btn-ten:hover, .btn-ans:hover {
+    background-color: var(--num-shadow);
+}
+
+.btn-equation:hover {
+    background-color: var(--equation-shadow);
+}
+
+.btn:active, .btn-op:active, .btn-ten:active, .btn-ans:active, .btn-equation:active {
+    transform: scale(0.93);
+}
+
+.btn-del, .btn-ac {
+    background-color: var(--action-btn);
+    border: none;
+    border-radius: 20px 20px;
+    padding: 12px 0;
+    margin: 5px 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-del:hover,.btn-ac:hover {
+    background-color: var(--action-shadow);
+}
+
+.btn-del:active, .btn-ac:active {
+    transform: scale(0.93);
+}
+
+/* Sidebar positioning on the right of the calculator */
+.history-panel {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 220px); /* Adjust based on calculator width */
+  transform: translateY(-50%) scale(0.9);
+  width: 220px;
+  max-height: 520px;
+  background: var(--history-bg) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: var(--history-shadow);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  z-index: 100;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Hide state */
+.history-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.85);
+}
+
+/* Header */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--history-header-border);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.history-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--history-header);
+}
+
+.close-history-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: var(--history-header);
+  cursor: pointer;
+}
+
+/* Scrollable List */
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.history-item {
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: var(--history-item-bg);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--history-item-border);
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.history-item:hover {
+  background-color: var(--history-header-border);
+  transform: translateX(-2px);
+}
+
+.history-item .hist-expr {
+  font-size: 0.72rem;
+  color: var(--history-expr);
+  opacity: 0.8;
+}
+
+.history-item .hist-res {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--history-result);
+  text-align: right;
+}
+
+.history-empty {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  padding-top: 20px;
+}
+
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(8px);
+    padding: 6px 10px;
+    border-radius: 9999px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.theme-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theme-dot:hover {
+    transform: scale(1.18);
+}
+
+.theme-dot.active {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #d8315b;
+}
+
+.dot-pink {
+    background-color: #e571af;
+}
+
+.dot-dark {
+    background-color: #0f172a;
+}
+
+.dot-light {
+    background: linear-gradient(90deg, #ffffff 70%, #800020 30%);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}

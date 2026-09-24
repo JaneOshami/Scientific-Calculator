@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Pink Calculator</title>
+    <link rel="stylesheet" href="calcme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Passions+Conflict&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Switcher Circles -->
+    <div class="theme-switcher" role="radiogroup" aria-label="Select Theme">
+        <button class="theme-dot dot-pink active" data-theme="pink" title="Pink Theme" aria-label="Pink Theme"></button>
+        <button class="theme-dot dot-dark" data-theme="dark" title="Midnight Blue Dark Mode" aria-label="Midnight Blue Dark Mode"></button>
+        <button class="theme-dot dot-light" data-theme="light" title="Burgundy White Light Mode"></button>
+    </div>
+
+    <div class="calculator">
+        <!--Calculator Header-->
+        <div class="calc-header">
+            <h2 class="calc-name">jescalculator</h2>
+            <h4 class="calc-type">SCIENTIFIC</h4>
+        </div>
+
+        <!--Calculator Screen-->
+        <div class="calc-screen">
+            <input type="text" class="calc-input" readonly>
+            <div class="screen-indicators">
+                <div id="angle-mode-indicator" class="angle-mode-indicator">DEG</div>
+                <div id="shift-indicator" class="shift-indicator"></div>
+            </div>
+        </div>
+
+        <!--Calculator Buttons-->
+        <div class="calc-buttons">
+            <!-- Button rows go here -->
+            <!--Section 1: Big Buttons-->
+            <div class="grid-one">
+                <button class="btn-shift" id="shift-btn" onclick="shiftFunction()">SHIFT</button>
+                <button class="btn-replay" onclick="replayHistory()">REPLAY</button>
+                <button class="btn-on" onclick="onFunction()">ON</button>
+            </div>
+
+            <!--Section 2: Functions Buttons-->
+            <!--Row 1-->
+            <div class="grid-two">
+                <div class="side-cluster left-cluster">
+                    <button class="btn-func" id="deg-rad-btn" onclick="toggleAngleMode()">DEG</button>
+                    <button class="btn-func" onclick="appendValue('!')">x!</button>
+                </div>
+
+                <!-- Gap where the bottom of the REPLAY button dips -->
+                <div class="replay-gap"></div>
+
+                <div class="side-cluster right-cluster">
+                    <button class="btn-func" onclick="appendFunc('^-1')">x<sup>-1</sup></button>
+                    <button class="btn-func" onclick="appendFunc('logBase(')">log<sub>□</sub>(□)</button>
+                </div>
+            </div>
+
+            
+            <div class="grid-three">
+                <!--Row 2-->
+                <button class="btn-func" id="fraction-btn" onclick="appendValue(',')">,</button>
+                <button class="btn-func" onclick="appendFunc('√')">√□</button> <!--&radic is for square root-->
+                <button class="btn-func" onclick="appendFunc('^2')">x<sup>2</sup></button>
+                <button class="btn-func" onclick="appendFunc('^')">x<sup>□</sup></button>
+                <button class="btn-func" onclick="appendFunc('log(')">log</button>
+                <button class="btn-func" onclick="appendFunc('ln(')">ln</button>
+
+                <!--Row 3-->
+                <button class="btn-func" onclick="appendFunc('P')">nPr</button>
+                <button class="btn-func" onclick="appendFunc('C')">nCr</button>
+                <button class="btn-func" onclick="appendFunc('√(')">□√□</button>
+                <button class="btn-func" onclick="appendFunc('sin(')">sin</button>
+                <button class="btn-func" onclick="appendFunc('cos(')">cos</button>
+                <button class="btn-func" onclick="appendFunc('tan(')">tan</button>
+
+                <!--Row 4-->
+                <button class="btn-func" onclick="appendFunc('π')">π</button>
+                <button class="btn-func" onclick="appendFunc('e')">&ee;</button>
+                <button class="btn-func" onclick="appendFunc('(')">(</button>
+                <button class="btn-func" onclick="appendFunc(')')">)</button>
+                <button class="btn-func" onclick="fractionToDecimal()">F&LeftRightArrow;D</button>
+                <button class="btn-func" onclick="appendFunc('%')">%</button>
+            </div>
+
+            <div class="grid-four">
+                <!--Section 3: Numbers and Operations-->
+                <!--Row 5-->
+                <button class="btn" onclick="appendValue('7')">7</button>
+                <button class="btn" onclick="appendValue('8')">8</button>
+                <button class="btn" onclick="appendValue('9')">9</button>
+                <button class="btn-del" onclick="deleteLast()">DEL</button>
+                <button class="btn-ac" onclick="clearScreen()">AC</button>
+            
+                <!--Row 6-->
+                <button class="btn" onclick="appendValue('4')">4</button>
+                <button class="btn" onclick="appendValue('5')">5</button>
+                <button class="btn" onclick="appendValue('6')">6</button>
+                <button class="btn-op" onclick="appendValue('x')">&Cross;</button>
+                <button class="btn-op" onclick="appendValue('÷')">&divide;</button>
+
+                <!--Row 7-->
+                <button class="btn" onclick="appendValue('1')">1</button>
+                <button class="btn" onclick="appendValue('2')">2</button>
+                <button class="btn" onclick="appendValue('3')">3</button>
+                <button class="btn-op" onclick="appendValue('+')">+</button>
+                <button class="btn-op" onclick="appendValue('-')">-</button>
+
+                <!--Row 8-->
+                <button class="btn" onclick="appendValue('0')">0</button>
+                <button class="btn" onclick="appendValue('.')">.</button>
+                <button class="btn-ten" onclick="appendValue('x10^')">x10<sup>x</sup></button>
+                <button class="btn-ans" onclick="previousAnswer()">Ans</button>
+                <button class="btn-equation" onclick="calculate()">=</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Sidebar Container -->
+    <aside class="history-panel hidden" id="history-panel">
+      <div class="history-header">
+        <h3>History</h3>
+        <button type="button" class="close-history-btn" onclick="replayHistory()">&times;</button>
+      </div>
+      <ul class="history-list" id="history-list">
+        <li class="history-empty">No calculations yet</li>
+      </ul>
+    </aside>
+
+    
+    <script src="calcme.js"></script>
+</body>
+</html>
